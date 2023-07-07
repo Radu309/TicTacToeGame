@@ -33,10 +33,10 @@ export default function Board(props) {
   useEffect(() => {
     let nextMoveIndex = 0;
       const timer = setTimeout(() => {
-        if (xIsNext && selectedPlayer === 'X') {
+        if (xIsNext) {
           nextMoveIndex = bestMove(squares);
           handleClick(nextMoveIndex);
-          console.log(squares);
+          //console.log(squares);
         }
       }, 1000);
       return () => clearTimeout(timer);
@@ -154,9 +154,10 @@ function bestMove(squares) {
   for (let i = 0; i < 9; i++) {
     if (squares[i] == null) {
       squares[i] = 'X';
-      let score = minmax(squares, 0, false);
-      squares[i] = null;
+      let score = minmax(squares,  false);
       console.log(score);
+      console.log(squares);
+      squares[i] = null;
       if (score > bestScore) {
         bestScore = score;
         move = i;
@@ -165,9 +166,10 @@ function bestMove(squares) {
   }
   return move;
 }
-function minmax(squares, depth, isMaximizing){
+function minmax(squares, isMaximizing){
   let result = calculateWinner(squares);
   if(result !== null){
+    //console.log(squares);
     return scores[result];
   }
 
@@ -189,8 +191,7 @@ function minmax(squares, depth, isMaximizing){
     for (let i = 0; i < 9; i++) {
       if (squares[i] == null) {
         squares[i] = 'X';
-        let score = minmax(squares, depth + 1, false);
-        console.log(score);
+        let score = minmax(squares,  false);
         squares[i] = null;
         bestScore = max(score, bestScore);
       }
@@ -201,7 +202,7 @@ function minmax(squares, depth, isMaximizing){
     for (let i = 0; i < 9; i++) {
       if (squares[i] == null) {
         squares[i] = '0';
-        let score = minmax(squares, depth + 1, true);
+        let score = minmax(squares, true);
         squares[i] = null;
         bestScore = min(score, bestScore);
       }
